@@ -1,4 +1,4 @@
-package br.usp.sdvt.core;
+package br.usp.sdext.core;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -17,8 +17,8 @@ import javax.persistence.SequenceGenerator;
 import org.hibernate.Session;
 import org.hibernate.exception.ConstraintViolationException;
 
-import br.usp.sdvt.parsers.BasicParser;
-import br.usp.sdvt.util.HibernateUtil;
+import br.usp.sdext.parsers.BasicParser;
+import br.usp.sdext.util.HibernateUtil;
 
 
 @Entity

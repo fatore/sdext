@@ -1,4 +1,4 @@
-package br.usp.sdvt.util;
+package br.usp.sdext.util;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;

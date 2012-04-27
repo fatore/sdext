@@ -1,4 +1,4 @@
-package br.usp.sdvt.parsers;
+package br.usp.sdext.parsers;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

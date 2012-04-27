@@ -1,4 +1,4 @@
-package br.usp.sdvt.core;
+package br.usp.sdext.core;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,9 +12,9 @@ import javax.persistence.OneToMany;
 import org.hibernate.Session;
 import org.hibernate.exception.ConstraintViolationException;
 
-import br.usp.sdvt.ghosts.GhostCandidate;
-import br.usp.sdvt.parsers.BasicParser;
-import br.usp.sdvt.util.HibernateUtil;
+import br.usp.sdext.ghosts.CandidateGhost;
+import br.usp.sdext.parsers.BasicParser;
+import br.usp.sdext.util.HibernateUtil;
 
 @Entity
 public class Candidature implements Serializable {
@@ -274,7 +274,7 @@ public class Candidature implements Serializable {
 		if (candidatures.size() == 1) {
 			candidatures.get(0).getIncomes().add(income);
 		} else {
-			session.save(new GhostCandidate(candidateName, ballotNo, income));
+			session.save(new CandidateGhost(candidateName, ballotNo, income));
 		}
 		if (candidatures.size() > 1){
 			System.err.println("maior que 1");

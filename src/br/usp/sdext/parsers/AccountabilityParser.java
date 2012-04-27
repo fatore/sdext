@@ -1,4 +1,4 @@
-package br.usp.sdvt.parsers;
+package br.usp.sdext.parsers;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -7,10 +7,10 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
-import br.usp.sdvt.core.Candidature;
-import br.usp.sdvt.core.Donor;
-import br.usp.sdvt.core.Income;
-import br.usp.sdvt.util.FileOperations;
+import br.usp.sdext.core.Candidature;
+import br.usp.sdext.core.Donor;
+import br.usp.sdext.core.Income;
+import br.usp.sdext.util.FileOperations;
 
 
 public class AccountabilityParser extends AbstractParser {

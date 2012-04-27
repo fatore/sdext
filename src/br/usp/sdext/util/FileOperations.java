@@ -1,4 +1,4 @@
-package br.usp.sdvt.util;
+package br.usp.sdext.util;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;

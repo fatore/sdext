@@ -1,4 +1,4 @@
-package br.usp.sdvt.ghosts;
+package br.usp.sdext.ghosts;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -6,11 +6,11 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import br.usp.sdvt.core.Income;
+import br.usp.sdext.core.Income;
 
 @Entity
 @Table(name="ghost_candidate")
-public class GhostCandidate {
+public class CandidateGhost {
 	
 	@Id
 	@GeneratedValue
@@ -20,11 +20,11 @@ public class GhostCandidate {
 	@OneToOne
 	Income income;
 
-	public GhostCandidate(String name, Integer ballotNo, Income income) {
+	public CandidateGhost(String name, Integer ballotNo, Income income) {
 		this.name = name;
 		this.ballotNo = ballotNo;
 		this.income = income;
 	}
 	
-	public GhostCandidate() {}
+	public CandidateGhost() {}
 }

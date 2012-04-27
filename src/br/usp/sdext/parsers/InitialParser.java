@@ -1,4 +1,4 @@
-package br.usp.sdvt.parsers;
+package br.usp.sdext.parsers;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,10 +14,10 @@ import java.util.Set;
 
 import org.hibernate.service.spi.Stoppable;
 
-import br.usp.sdvt.core.Candidate;
-import br.usp.sdvt.core.Candidature;
-import br.usp.sdvt.core.Election;
-import br.usp.sdvt.util.FileOperations;
+import br.usp.sdext.core.Candidate;
+import br.usp.sdext.core.Candidature;
+import br.usp.sdext.core.Election;
+import br.usp.sdext.util.FileOperations;
 
 public class InitialParser extends AbstractParser { 
 	
@@ -143,11 +143,11 @@ public class InitialParser extends AbstractParser {
 		AbstractParser parser;
 		
 		parser = new InitialParser();
-		String baseDir = "/work1/wokspace/social-vis/data/eleitorais/candidatos";
+		String baseDir = "/home/fatore/workspace/sdext/data/eleitorais/candidatos/2010";
 		parser.loadAndSave(baseDir);
 		
 		parser = new AccountabilityParser();
-		baseDir = "/work1/wokspace/social-vis/data/eleitorais/prestacao_contas";
-		parser.loadAndSave(baseDir);
+		baseDir = "/home/fatore/workspace/sdext/data/eleitorais/prestacao_contas";
+//		parser.loadAndSave(baseDir);
 	}
 }

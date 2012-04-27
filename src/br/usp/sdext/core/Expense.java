@@ -1,4 +1,4 @@
-package br.usp.sdvt.core;
+package br.usp.sdext.core;
 
 public class Expense {
 
