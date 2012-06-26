@@ -32,7 +32,7 @@ public class BasicParser {
 		Matcher matcher = pattern.matcher(str);
 		str = matcher.replaceAll(" ");
 		
-		pattern = Pattern.compile("\\bN√ÉO\\b");
+		pattern = Pattern.compile("\\bN√O\\b");
 		matcher = pattern.matcher(str);
 		if (matcher.find()) {
 			return null;
