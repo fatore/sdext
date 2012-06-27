@@ -12,7 +12,7 @@ import javax.persistence.OneToMany;
 import org.hibernate.Session;
 import org.hibernate.exception.ConstraintViolationException;
 
-import br.usp.sdext.ghosts.CandidateGhost;
+import br.usp.sdext.ghosts.GhostCandidate;
 import br.usp.sdext.parsers.BasicParser;
 import br.usp.sdext.util.HibernateUtil;
 
@@ -230,7 +230,6 @@ public class Candidature implements Serializable {
 				marital, maxExpenses, partyNo, partyAcronym, partyName, tseID);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public static void addIncome(Income income, String line, Integer year, boolean old) {
 		// break line where finds ";"
 		String pieces[] = line.split("\";\"");
@@ -274,7 +273,7 @@ public class Candidature implements Serializable {
 		if (candidatures.size() == 1) {
 			candidatures.get(0).getIncomes().add(income);
 		} else {
-			session.save(new CandidateGhost(candidateName, ballotNo, income));
+			session.save(new GhostCandidate(candidateName, ballotNo, income));
 		}
 		if (candidatures.size() > 1){
 			System.err.println("maior que 1");

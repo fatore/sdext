@@ -5,10 +5,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
 
 import org.hibernate.Session;
 import org.hibernate.exception.ConstraintViolationException;
@@ -19,6 +16,8 @@ import br.usp.sdext.util.HibernateUtil;
 @Entity
 public class Election implements Serializable {
 	
+	private static final long serialVersionUID = 5869393024124951125L;
+
 	@Id
 	private Long id;
 
@@ -78,11 +77,13 @@ public class Election implements Serializable {
 	
 	@Override
 	public String toString() {
+		
 		return year + ", " + description + "," + uf + ", " + ue + ", " + post;
 	}
 
 	@Override
 	public int hashCode() {
+		
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((postID == null) ? 0 : postID.hashCode());
@@ -94,6 +95,7 @@ public class Election implements Serializable {
 
 	@Override
 	public boolean equals(Object obj) {
+		
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -125,6 +127,7 @@ public class Election implements Serializable {
 	}
 
 	public Long save() {
+		
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		
@@ -141,6 +144,7 @@ public class Election implements Serializable {
 	}
 	
 	public static Election findByPK(Long id) {
+		
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		
@@ -151,7 +155,9 @@ public class Election implements Serializable {
 		return election;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static List<Election> findAll() {
+		
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		

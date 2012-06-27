@@ -10,7 +10,7 @@ import br.usp.sdext.core.Income;
 
 @Entity
 @Table(name="ghost_candidate")
-public class CandidateGhost {
+public class GhostCandidate {
 	
 	@Id
 	@GeneratedValue
@@ -20,11 +20,11 @@ public class CandidateGhost {
 	@OneToOne
 	Income income;
 
-	public CandidateGhost(String name, Integer ballotNo, Income income) {
+	public GhostCandidate(String name, Integer ballotNo, Income income) {
 		this.name = name;
 		this.ballotNo = ballotNo;
 		this.income = income;
 	}
 	
-	public CandidateGhost() {}
+	public GhostCandidate() {}
 }

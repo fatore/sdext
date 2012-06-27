@@ -21,10 +21,10 @@ public class BasicParser {
 				try {
 					return new SimpleDateFormat("dd-MMM-yy").parse(str);
 				} catch (Exception e3){
+					return null;
 				}
 			}
 		}
-		return null;
 	}
 	
 	public static String parseStr(String str) {

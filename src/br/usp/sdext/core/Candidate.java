@@ -1,18 +1,12 @@
 package br.usp.sdext.core;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
 
 import org.hibernate.Session;
 import org.hibernate.exception.ConstraintViolationException;
@@ -24,6 +18,8 @@ import br.usp.sdext.util.HibernateUtil;
 @Entity
 public class Candidate implements Comparable<Candidate>, Serializable {
 	
+	private static final long serialVersionUID = 4220422090844941540L;
+
 	@Id
 	private Long id;
 	
@@ -37,19 +33,28 @@ public class Candidate implements Comparable<Candidate>, Serializable {
 	
 	// codes
 	private Long sexID;
+	@Column(name="ctzID")
 	private Long citizenshipID;
+	@Column(name="bthID")
 	private Long birthTownID;
 	
 	// labels
 	private String sex;
+	@Column(name="ctz")
 	private String citizenship;
+	@Column(name="bth")
 	private String birthTown;
+	
+	private boolean dupper;
 	
 	public Candidate() {}
 
 	public Candidate(Long voterID, String name, Date birthDate,
 			String uf, Long sexID, Long citizenshipID, Long birthTownID,
 			String sex, String citizenship, String birthTown) {
+		
+		this.id = null;
+		
 		this.voterID = voterID;
 		this.name = name;
 		this.birthDate = birthDate;
@@ -60,6 +65,8 @@ public class Candidate implements Comparable<Candidate>, Serializable {
 		this.sex = sex;
 		this.citizenship = citizenship;
 		this.birthTown = birthTown;
+		
+		this.dupper = false;
 	}
 
 	// getters
@@ -74,6 +81,7 @@ public class Candidate implements Comparable<Candidate>, Serializable {
 	public String getCitizenship() {return citizenship;}
 	public Long getBirthTownID() {return birthTownID;}
 	public String getBirthTown() {return birthTown;}
+	public boolean getDupper() {return dupper;}
 
 	// setters
 	public void setID(Long id) {this.id = id;}
@@ -87,9 +95,11 @@ public class Candidate implements Comparable<Candidate>, Serializable {
 	public void setCitizenship(String citizenship) {this.citizenship = citizenship;}
 	public void setBirthTownID(Long birthTownID) {this.birthTownID = birthTownID;}
 	public void setBirthTown(String birthTown) {this.birthTown = birthTown;}
+	public void setDupper(boolean dupper) {this.dupper = dupper;}
 	
 	// sqls
 	public Long save() {
+		
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		
@@ -106,6 +116,7 @@ public class Candidate implements Comparable<Candidate>, Serializable {
 	}
 	
 	public void delete() {
+		
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		
@@ -135,6 +146,7 @@ public class Candidate implements Comparable<Candidate>, Serializable {
 	}
 	
 	public static Candidate findByID(Long id) {
+		
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		
@@ -145,7 +157,9 @@ public class Candidate implements Comparable<Candidate>, Serializable {
 		return candidate;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static List<Candidate> findAll() {
+		
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		
@@ -157,6 +171,7 @@ public class Candidate implements Comparable<Candidate>, Serializable {
 	}
 	
 	public static Candidate findByBasic(String name, Date birthDate, String birthState) {
+		
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		
@@ -177,11 +192,13 @@ public class Candidate implements Comparable<Candidate>, Serializable {
 
 	@Override
 	public String toString() {
+		
 		return name + ", birthDate=" + birthDate + ", voterId=" + voterID;
 	}
 
 	@Override
 	public int hashCode() {
+		
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((voterID == null) ? 0 : voterID.hashCode());
@@ -190,6 +207,23 @@ public class Candidate implements Comparable<Candidate>, Serializable {
 
 	@Override
 	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Candidate other = (Candidate) obj;
+		if (voterID == null) {
+			if (other.voterID != null)
+				return false;
+		} else if (!voterID.equals(other.voterID))
+			return false;
+		return true;
+	}
+
+	public boolean similar(Object obj) {
+		
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -221,6 +255,7 @@ public class Candidate implements Comparable<Candidate>, Serializable {
 	}
 
 	public int compareTo(Candidate candidate) {
+		
 		if (name.compareToIgnoreCase(candidate.name) == 0) {
 			if (birthDate.compareTo(candidate.getBirthDate()) == 0) {
 				if (uf.compareToIgnoreCase(candidate.uf) == 0) {
@@ -237,6 +272,7 @@ public class Candidate implements Comparable<Candidate>, Serializable {
 	}
 	
 	public int validate() {
+		
 		int count = 0;
 		
 		count += (voterID != null && !voterID.equals(-1) && !voterID.equals(0)) ? 100 : 0;
@@ -254,6 +290,7 @@ public class Candidate implements Comparable<Candidate>, Serializable {
 	}
 	
 	public void merge(Candidate candidate) {
+		
 		this.voterID = (candidate.voterID != null) ? candidate.voterID : voterID;
 		this.name = (candidate.name != null) ? candidate.name : name;
 		this.birthDate = (candidate.birthDate != null) ? candidate.birthDate : birthDate;
@@ -300,33 +337,5 @@ public class Candidate implements Comparable<Candidate>, Serializable {
 		
 		return new Candidate(voterID, name, birthDate, uf, sexID, 
 				citizenshipID, birthTownID, sex, citizenship, birthTown);
-	}
-	
-	public static void main(String[] args) {
-		
-		Candidate candidate = new Candidate();
-		candidate.setName("ANTONIO NERES GOUVEIA");
-		candidate.setBirthDate(BasicParser.parseDate("22/03/1952"));
-		candidate.setUF("SP");
-		candidate.setVoterID(1L);
-		
-		Map<Candidate, Candidate> candidates = new HashMap<Candidate, Candidate>();
-		candidates.put(candidate, candidate);
-		
-		Candidature c = new Candidature();
-		c.setCandidate(candidate);
-		
-		Candidate candidate2 = new Candidate();
-		candidate2.setName("ANTONIO NERES GOUVEIA");
-		candidate2.setBirthDate(BasicParser.parseDate("22/03/1952"));
-		candidate2.setUF("SP");
-		candidate2.setVoterID(1L);
-		candidate2.setBirthTown("Salvador");
-		
-		Candidate stored = candidates.get(candidate2);
-		candidates.put(candidate2, candidate2);
-		
-		System.out.println(c.getCandidate().toString());
-		
 	}
 }
