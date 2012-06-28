@@ -1,4 +1,4 @@
-package br.usp.sdext.core;
+package br.usp.sdext.models;
 
 import java.io.Serializable;
 import java.util.List;
@@ -7,45 +7,45 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 import org.hibernate.Session;
-import org.hibernate.exception.ConstraintViolationException;
 
+import br.usp.sdext.core.Model;
 import br.usp.sdext.util.HibernateUtil;
 import br.usp.sdext.util.Misc;
 
 @Entity
-public class Party implements Serializable {
+public class Party extends Model implements Serializable {
 
 	private static final long serialVersionUID = 7101407303061260986L;
 
 	@Id
 	private Long id;
 	
-	private Integer partyNo;
-	private String partyAcronym;
-	private String partyName;	
+	private Integer no;
+	private String acronym;
+	private String name;	
 	
 	public Party(Integer partyNo, String partyAcronym, String partyName) {
 		
-		this.partyNo = partyNo;
-		this.partyAcronym = partyAcronym;
-		this.partyName = partyName;
+		this.no = partyNo;
+		this.acronym = partyAcronym;
+		this.name = partyName;
 	}
 	
 	public Long getID() {return id;}
-	public Integer getPartyNo() {return partyNo;}
-	public String getPartyAcronym() {return partyAcronym;}
-	public String getPartyName() {return partyName;}
+	public Integer getNo() {return no;}
+	public String getAcronym() {return acronym;}
+	public String getName() {return name;}
 	
 	public void setID(Long id) {this.id = id;}
-	public void setPartyNo(Integer partyNo) {this.partyNo = partyNo;}
-	public void setPartyAcronym(String partyAcronym) {this.partyAcronym = partyAcronym;}
-	public void setPartyName(String partyName) {this.partyName = partyName;}
+	public void setNo(Integer partyNo) {this.no = partyNo;}
+	public void setAcronym(String partyAcronym) {this.acronym = partyAcronym;}
+	public void setName(String partyName) {this.name = partyName;}
 	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((partyNo == null) ? 0 : partyNo.hashCode());
+		result = prime * result + ((no == null) ? 0 : no.hashCode());
 		return result;
 	}
 
@@ -58,31 +58,20 @@ public class Party implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Party other = (Party) obj;
-		if (partyNo == null) {
-			if (other.partyNo != null)
+		if (no == null) {
+			if (other.no != null)
 				return false;
-		} else if (!partyNo.equals(other.partyNo))
+		} else if (!no.equals(other.no))
 			return false;
 		return true;
 	}
 	
-	public Long save() {
+	@Override
+	public String toString() {
 		
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		session.beginTransaction();
-		
-		Long id = null;
-		try {
-			id = (Long) session.save(this);
-			session.getTransaction().commit();		
-		} catch (ConstraintViolationException e) {
-			session.getTransaction().rollback();
-			throw e;
-		}
-		
-		return id;
+		return no + ", " + acronym + ", " + name;
 	}
-	
+
 	public static Party findByPK(Long id) {
 		
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();

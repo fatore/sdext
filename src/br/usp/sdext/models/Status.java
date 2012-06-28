@@ -1,4 +1,4 @@
-package br.usp.sdext.core;
+package br.usp.sdext.models;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -10,13 +10,13 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 import org.hibernate.Session;
-import org.hibernate.exception.ConstraintViolationException;
 
+import br.usp.sdext.core.Model;
 import br.usp.sdext.util.HibernateUtil;
 import br.usp.sdext.util.Misc;
 
 @Entity
-public class Status implements Serializable {
+public class Status extends Model implements Serializable {
 
 	private static final long serialVersionUID = 2324783032637391486L;
 
@@ -117,19 +117,13 @@ public class Status implements Serializable {
 		return true;
 	}
 
-	public void save() {
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		session.beginTransaction();
-		
-		try {
-			session.save(this);
-			session.getTransaction().commit();		
-		} catch (ConstraintViolationException e) { 
-			session.getTransaction().rollback();
-			throw e;
-		}
+	@Override
+	public String toString() {
+		return year + ", "	+ age + ", " + currentJobID + ", "  
+				+ currentJob + ", " + schoolingID + ", " + schooling +
+				", " + maritalID + ", " + marital + ", " + tseID ;
 	}
-	
+
 	public static Status findByPK(Status id) {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();

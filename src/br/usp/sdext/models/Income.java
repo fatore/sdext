@@ -1,23 +1,20 @@
-package br.usp.sdext.core;
+package br.usp.sdext.models;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
 
-import org.hibernate.Session;
-import org.hibernate.exception.ConstraintViolationException;
-
+import br.usp.sdext.core.Model;
 import br.usp.sdext.util.Misc;
-import br.usp.sdext.util.HibernateUtil;
 
 @Entity
-public class Income {
-	
+public class Income extends Model implements Serializable {
+
+	private static final long serialVersionUID = 2835344125199701470L;
+
 	@Id
 	private Long id;
 	
@@ -55,24 +52,7 @@ public class Income {
 	public String toString() {
 		return donor.getName() + ", " + value + ", " + type;
 	}
-	
-	// sqls
-	public Long save() {
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		session.beginTransaction();
 
-		Long id = null;
-		try {
-			id = (Long) session.save(this);
-			session.getTransaction().commit();		
-		} catch (ConstraintViolationException e) { 
-			session.getTransaction().rollback();
-			throw e;
-		}
-
-		return id;
-	}
-	
 	public static Income parse(String line, boolean old) {
 		// break line where finds ";"
 		String pieces[] = line.split("\";\"");

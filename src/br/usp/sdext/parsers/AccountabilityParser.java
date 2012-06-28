@@ -7,9 +7,9 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
-import br.usp.sdext.core.Candidature;
-import br.usp.sdext.core.Donor;
-import br.usp.sdext.core.Income;
+import br.usp.sdext.models.Candidature;
+import br.usp.sdext.models.Donor;
+import br.usp.sdext.models.Income;
 import br.usp.sdext.util.FileOperations;
 
 
@@ -125,7 +125,7 @@ public class AccountabilityParser extends AbstractParser {
 		System.out.print("\tSaving donors...");
 		start = System.currentTimeMillis();
 		for (Donor donor : donors.values()) {
-//			donor.save();
+			donor.save();
 		}
 		finish = System.currentTimeMillis();
 		System.out.printf("Finished!(%d mins %d secs)\n",

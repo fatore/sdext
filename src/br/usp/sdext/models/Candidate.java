@@ -1,4 +1,4 @@
-package br.usp.sdext.core;
+package br.usp.sdext.models;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -11,12 +11,13 @@ import javax.persistence.Id;
 import org.hibernate.Session;
 import org.hibernate.exception.ConstraintViolationException;
 
-import br.usp.sdext.util.Misc;
+import br.usp.sdext.core.Model;
 import br.usp.sdext.util.HibernateUtil;
+import br.usp.sdext.util.Misc;
 
 
 @Entity
-public class Candidate implements Comparable<Candidate>, Serializable {
+public class Candidate  extends Model implements Comparable<Candidate>, Serializable {
 	
 	private static final long serialVersionUID = 4220422090844941540L;
 
@@ -96,24 +97,6 @@ public class Candidate implements Comparable<Candidate>, Serializable {
 	public void setBirthTownID(Long birthTownID) {this.birthTownID = birthTownID;}
 	public void setBirthTown(String birthTown) {this.birthTown = birthTown;}
 	public void setDupper(boolean dupper) {this.dupper = dupper;}
-	
-	// sqls
-	public Long save() {
-		
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		session.beginTransaction();
-		
-		Long id = null;
-		try {
-			id = (Long) session.save(this);
-			session.getTransaction().commit();		
-		} catch (ConstraintViolationException e) { 
-			session.getTransaction().rollback();
-			throw e;
-		}
-		
-		return id;
-	}
 	
 	public void delete() {
 		

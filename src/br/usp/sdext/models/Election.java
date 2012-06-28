@@ -1,4 +1,4 @@
-package br.usp.sdext.core;
+package br.usp.sdext.models;
 
 import java.io.Serializable;
 import java.util.List;
@@ -8,13 +8,13 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 import org.hibernate.Session;
-import org.hibernate.exception.ConstraintViolationException;
 
-import br.usp.sdext.util.Misc;
+import br.usp.sdext.core.Model;
 import br.usp.sdext.util.HibernateUtil;
+import br.usp.sdext.util.Misc;
 
 @Entity
-public class Election implements Serializable {
+public class Election extends Model implements Serializable {
 	
 	private static final long serialVersionUID = 5869393024124951125L;
 
@@ -126,23 +126,6 @@ public class Election implements Serializable {
 		return true;
 	}
 
-	public Long save() {
-		
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		session.beginTransaction();
-		
-		Long id = null;
-		try {
-			id = (Long) session.save(this);
-			session.getTransaction().commit();		
-		} catch (ConstraintViolationException e) {
-			session.getTransaction().rollback();
-			throw e;
-		}
-		
-		return id;
-	}
-	
 	public static Election findByPK(Long id) {
 		
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
@@ -186,17 +169,5 @@ public class Election implements Serializable {
 		
 		return new Election(year, round, uf, ueID, postID, description, ue, post);
 		
-	}
-
-	public static void main(String[] args) {
-		
-		Election e1 = new Election(2010, 1, "SP", "7123", 
-				new Long(123123), "Eleicoes", "Sobradinho", "Governador");
-		
-		Election e2 = new Election(2010, 1, "SP", "7123", 
-				new Long(123123), "Eleicoes", "Sobradinho", "Governador");
-		
-		System.out.println(e1.save());
-		System.out.println(e2.save());
 	}
 }

@@ -31,16 +31,16 @@
         <!-- Drop and re-create the database schema on startup -->
         <property name="hbm2ddl.auto">create</property>
 
-	<mapping class="br.usp.sdext.core.Candidate"/>
-	<mapping class="br.usp.sdext.core.Status"/>
-	<mapping class="br.usp.sdext.ghosts.GhostCandidate"/>
+	<mapping class="br.usp.sdext.models.Candidate"/>
+	<mapping class="br.usp.sdext.models.Status"/>
+	<mapping class="br.usp.sdext.models.ghosts.GhostCandidate"/>
 	
-	<mapping class="br.usp.sdext.core.Election"/>
-	<mapping class="br.usp.sdext.core.Party"/>
+	<mapping class="br.usp.sdext.models.Election"/>
+	<mapping class="br.usp.sdext.models.Party"/>
 	
-	<mapping class="br.usp.sdext.core.Candidature"/>
-	<mapping class="br.usp.sdext.core.Donor"/>
-	<mapping class="br.usp.sdext.core.Income"/>
+	<mapping class="br.usp.sdext.models.Candidature"/>
+	<mapping class="br.usp.sdext.models.Donor"/>
+	<mapping class="br.usp.sdext.models.Income"/>
 	
 
     </session-factory>

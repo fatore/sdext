@@ -1,4 +1,4 @@
-package br.usp.sdext.core;
+package br.usp.sdext.models;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -10,14 +10,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import org.hibernate.Session;
-import org.hibernate.exception.ConstraintViolationException;
 
-import br.usp.sdext.ghosts.GhostCandidate;
+import br.usp.sdext.core.Model;
+import br.usp.sdext.models.ghosts.GhostCandidate;
 import br.usp.sdext.util.HibernateUtil;
 import br.usp.sdext.util.Misc;
 
 @Entity
-public class Candidature implements Serializable {
+public class Candidature extends Model implements Serializable {
 
 	private static final long serialVersionUID = 2324783032637391486L;
 
@@ -123,20 +123,6 @@ public class Candidature implements Serializable {
 		return true;
 	}
 
-	public void save() {
-		
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		session.beginTransaction();
-		
-		try {
-			session.save(this);
-			session.getTransaction().commit();		
-		} catch (ConstraintViolationException e) { 
-			session.getTransaction().rollback();
-			throw e;
-		}
-	}
-	
 	public static Candidature findByPK(Candidature id) {
 		
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();

@@ -1,4 +1,4 @@
-package br.usp.sdext.ghosts;
+package br.usp.sdext.models.ghosts;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -6,7 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import br.usp.sdext.core.Income;
+import br.usp.sdext.models.Income;
 
 @Entity
 @Table(name="ghost_candidate")

@@ -10,11 +10,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import br.usp.sdext.core.Candidate;
-import br.usp.sdext.core.Candidature;
-import br.usp.sdext.core.Election;
-import br.usp.sdext.core.Party;
-import br.usp.sdext.core.Status;
+import br.usp.sdext.models.Candidate;
+import br.usp.sdext.models.Candidature;
+import br.usp.sdext.models.Coalition;
+import br.usp.sdext.models.Election;
+import br.usp.sdext.models.Party;
+import br.usp.sdext.models.Status;
 
 public class CandidaturesParser extends AbstractParser { 
 	
@@ -26,6 +27,8 @@ public class CandidaturesParser extends AbstractParser {
 	private Long numCandidates;
 	
 	private Map<Election, Election> elections;
+	
+	private Map<Coalition, Coalition> coalitions;
 	
 	private Map<Party, Party> parties;
 	
@@ -41,6 +44,8 @@ public class CandidaturesParser extends AbstractParser {
 		elections = new HashMap<Election, Election>();
 		
 		parties = new HashMap<Party, Party>();
+		
+		coalitions = new HashMap<Coalition, Coalition>();
 		
 		candidatures = new HashSet<Candidature>();
 	}
@@ -170,8 +175,36 @@ public class CandidaturesParser extends AbstractParser {
 				election = mapElection;
 			}
 			
+
 			///////////////////////////////////////////
-			// PARSING ELECTIONS  ////////////////////
+			// PARSING COALITIONS  /////////////////
+			//////////////////////////////////////////
+			
+			// Parse data.
+			Coalition coalition = Coalition.parse(pieces);
+			
+			// Look if Election exists in map
+			Coalition mapCoalition = coalitions.get(coalition);
+			
+			// If didn't find anything ..
+			if (mapCoalition == null) {
+				
+				// Set the ID for the new Election ...
+				coalition.setID(new Long(coalitions.size()));
+				
+				// ... and put it in the map.
+				coalitions.put(coalition, coalition);
+				
+			} 
+			// If found ... 
+			else {
+				System.err.println("jah existe! dah uma debugada");
+				// ...  set as the mapped object.
+				coalition = mapCoalition;
+			}
+			
+			///////////////////////////////////////////
+			// PARSING PARTIES  ////////////////////
 			//////////////////////////////////////////
 			
 			// Parse data.
@@ -196,7 +229,6 @@ public class CandidaturesParser extends AbstractParser {
 				// ...  set as the mapped object.
 				party = mapParty;
 			}
-			
 			///////////////////////////////////////////
 			// PARSING CANDIDATURES  /////////////////
 			//////////////////////////////////////////
@@ -215,6 +247,13 @@ public class CandidaturesParser extends AbstractParser {
 			} else {
 				System.err.println("jah existe! dah uma debugada");
 			}
+			
+			System.out.println(candidate.toString());
+			System.out.println(status.toString());
+			System.out.println(election.toString());
+			System.out.println(coalition.toString());
+			System.out.println(party.toString());
+			System.out.println();
 		}
 		
 		if (in != null) {
@@ -229,6 +268,7 @@ public class CandidaturesParser extends AbstractParser {
 		System.out.println("\tCandidates: " + candidates.size());
 		System.out.println("\tDuplicate Candidates: " + duppers.size());
 		System.out.println("\tElections: " + elections.size());
+		System.out.println("\tParties: " + parties.size());
 		System.out.println("\tCandidatures: " + candidatures.size());
 		
 		System.out.println("\nSaving objects in the database, this can take several minutes.");
@@ -249,13 +289,11 @@ public class CandidaturesParser extends AbstractParser {
 			
 			candidate.save();
 		}
-		
 		System.out.println("\tSaving candidates status...");
 		for (Status status : candidatesStatus) {
 			
 			status.save();
 		}
-		 
 		///////////////////////////////////////////
 		// SAVING ELECTIONS  /////////////////////
 		//////////////////////////////////////////
@@ -264,7 +302,6 @@ public class CandidaturesParser extends AbstractParser {
 			
 			election.save();
 		}
-		
 		///////////////////////////////////////////
 		// SAVING ELECTIONS  /////////////////////
 		//////////////////////////////////////////
@@ -273,7 +310,6 @@ public class CandidaturesParser extends AbstractParser {
 		
 			party.save();
 		}
-		
 		///////////////////////////////////////////
 		// SAVING CANDIDATURES  ///////////////////
 		//////////////////////////////////////////
@@ -282,5 +318,6 @@ public class CandidaturesParser extends AbstractParser {
 			
 			candidature.save();
 		}
+		System.out.println("Finished.");
 	}
 }
