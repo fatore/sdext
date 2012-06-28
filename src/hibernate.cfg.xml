@@ -32,12 +32,16 @@
         <property name="hbm2ddl.auto">create</property>
 
 	<mapping class="br.usp.sdext.core.Candidate"/>
-	<mapping class="br.usp.sdext.core.Candidature"/>
+	<mapping class="br.usp.sdext.core.Status"/>
+	<mapping class="br.usp.sdext.ghosts.GhostCandidate"/>
+	
 	<mapping class="br.usp.sdext.core.Election"/>
+	<mapping class="br.usp.sdext.core.Party"/>
+	
+	<mapping class="br.usp.sdext.core.Candidature"/>
 	<mapping class="br.usp.sdext.core.Donor"/>
 	<mapping class="br.usp.sdext.core.Income"/>
 	
-	<mapping class="br.usp.sdext.ghosts.GhostCandidate"/>
 
     </session-factory>
 

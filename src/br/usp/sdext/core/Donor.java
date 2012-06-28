@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import org.hibernate.Session;
 import org.hibernate.exception.ConstraintViolationException;
 
-import br.usp.sdext.parsers.BasicParser;
+import br.usp.sdext.util.Misc;
 import br.usp.sdext.util.HibernateUtil;
 
 @Entity
@@ -109,13 +109,13 @@ public class Donor {
 		String donorUF = null;
 		String donorName = null;
 		if (old) {
-			donorCPF = BasicParser.parseLong(pieces[6]);
-			donorUF = BasicParser.parseStr(pieces[7]);
-			donorName = BasicParser.parseStr(pieces[8]);
+			donorCPF = Misc.parseLong(pieces[6]);
+			donorUF = Misc.parseStr(pieces[7]);
+			donorName = Misc.parseStr(pieces[8]);
 		} else {
-			donorCPF = BasicParser.parseLong(pieces[10]);
-			donorUF = BasicParser.parseStr(pieces[1]);
-			donorName = BasicParser.parseStr(pieces[11]);
+			donorCPF = Misc.parseLong(pieces[10]);
+			donorUF = Misc.parseStr(pieces[1]);
+			donorName = Misc.parseStr(pieces[11]);
 		}
 		
 		return new Donor(donorName, donorCPF, donorUF);

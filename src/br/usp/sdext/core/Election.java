@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import org.hibernate.Session;
 import org.hibernate.exception.ConstraintViolationException;
 
-import br.usp.sdext.parsers.BasicParser;
+import br.usp.sdext.util.Misc;
 import br.usp.sdext.util.HibernateUtil;
 
 @Entity
@@ -168,24 +168,21 @@ public class Election implements Serializable {
 		return elections;
 	}
 	
-	public static Election parse(String line) {
+	public static Election parse(String[] pieces) {
 		
-		// break line where finds ";"
-		String pieces[] = line.split("\";\"");
-
 		// remove double quotes
 		for (int i = 0; i < pieces.length; i++) {
 			pieces[i] = pieces[i].replace("\"", "");
 		}
 
-		Integer year = BasicParser.parseInt(pieces[2]);
-		Integer round = BasicParser.parseInt(pieces[3]);	
-		String description = BasicParser.parseStr(pieces[4]);
-		String uf = BasicParser.parseStr(pieces[5]);
-		String ueID = BasicParser.parseStr(pieces[6]);
-		String ue = BasicParser.parseStr(pieces[7]);
-		Long postID = BasicParser.parseLong(pieces[8]);
-		String post = BasicParser.parseStr(pieces[9]);
+		Integer year = Misc.parseInt(pieces[2]);
+		Integer round = Misc.parseInt(pieces[3]);	
+		String description = Misc.parseStr(pieces[4]);
+		String uf = Misc.parseStr(pieces[5]);
+		String ueID = Misc.parseStr(pieces[6]);
+		String ue = Misc.parseStr(pieces[7]);
+		Long postID = Misc.parseLong(pieces[8]);
+		String post = Misc.parseStr(pieces[9]);
 		
 		return new Election(year, round, uf, ueID, postID, description, ue, post);
 		

@@ -12,7 +12,7 @@ import javax.persistence.SequenceGenerator;
 import org.hibernate.Session;
 import org.hibernate.exception.ConstraintViolationException;
 
-import br.usp.sdext.parsers.BasicParser;
+import br.usp.sdext.util.Misc;
 import br.usp.sdext.util.HibernateUtil;
 
 @Entity
@@ -86,15 +86,15 @@ public class Income {
 		Float value = null;
 		String type = null;
 		if (old){
-			date = BasicParser.parseDate(pieces[5]);
-			value = BasicParser.parseFloat(pieces[9]);
+			date = Misc.parseDate(pieces[5]);
+			value = Misc.parseFloat(pieces[9]);
 			try {
-				type = BasicParser.parseStr(pieces[10]);
+				type = Misc.parseStr(pieces[10]);
 			} catch (Exception e) {}
 		} else {
-			date = BasicParser.parseDate(pieces[12]);
-			value = BasicParser.parseFloat(pieces[13]);
-			type = BasicParser.parseStr(pieces[16]);
+			date = Misc.parseDate(pieces[12]);
+			value = Misc.parseFloat(pieces[13]);
+			type = Misc.parseStr(pieces[16]);
 		}
 		
 		return new Income(value, type, date);

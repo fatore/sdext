@@ -11,7 +11,7 @@ import javax.persistence.Id;
 import org.hibernate.Session;
 import org.hibernate.exception.ConstraintViolationException;
 
-import br.usp.sdext.parsers.BasicParser;
+import br.usp.sdext.util.Misc;
 import br.usp.sdext.util.HibernateUtil;
 
 
@@ -303,35 +303,32 @@ public class Candidate implements Comparable<Candidate>, Serializable {
 		this.birthTown = (candidate.birthTown != null) ? candidate.birthTown : birthTown;
 	}
 	
-	public static Candidate parse(String line) {
+	public static Candidate parse(String[] pieces) {
 		
-		// break line where finds ";"
-		String pieces[] = line.split("\";\"");
-
 		// remove double quotes
 		for (int i = 0; i < pieces.length; i++) {
 			pieces[i] = pieces[i].replace("\"", "");
 		}
 
 		// retrieve general data
-		String name = BasicParser.parseStr(pieces[10]);
-		Date birthDate = BasicParser.parseDate(pieces[25]);
-		String uf = BasicParser.parseStr(pieces[36]);
+		String name = Misc.parseStr(pieces[10]);
+		Date birthDate = Misc.parseDate(pieces[25]);
+		String uf = Misc.parseStr(pieces[36]);
 
 		// retrieve codes
-		Long voterID = BasicParser.parseLong(pieces[26]);
-		Long sexID = BasicParser.parseLong(pieces[28]);
-		Long citizenshipID = BasicParser.parseLong(pieces[34]);
-		Long birthTownID = BasicParser.parseLong(pieces[37]);
+		Long voterID = Misc.parseLong(pieces[26]);
+		Long sexID = Misc.parseLong(pieces[28]);
+		Long citizenshipID = Misc.parseLong(pieces[34]);
+		Long birthTownID = Misc.parseLong(pieces[37]);
 
 		// retrieve labels						
-		String sex = BasicParser.parseStr(pieces[29]);
-		String citizenship = BasicParser.parseStr(pieces[35]);
-		String birthTown = BasicParser.parseStr(pieces[38]);
+		String sex = Misc.parseStr(pieces[29]);
+		String citizenship = Misc.parseStr(pieces[35]);
+		String birthTown = Misc.parseStr(pieces[38]);
 		
 		if (name == null) {
 			System.err.println("ERROR: EMPTY OR INVALID CANDIDATE NAME!");
-			name = BasicParser.parseStr(pieces[10]);
+			name = Misc.parseStr(pieces[10]);
 			return null;
 		}
 		

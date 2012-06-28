@@ -1,7 +1,7 @@
 package br.usp.sdext.app;
 
 import br.usp.sdext.parsers.AbstractParser;
-import br.usp.sdext.parsers.InitialParser;
+import br.usp.sdext.parsers.CandidaturesParser;
 
 public class App {
 
@@ -9,8 +9,8 @@ public class App {
 		
 		AbstractParser parser;
 		
-		parser = new InitialParser();
-		String baseDir = "../data/eleitorais/candidatos/2010";
+		parser = new CandidaturesParser();
+		String baseDir = "data/candidatos/3000";
 		parser.loadAndSave(baseDir);
 		
 //		parser = new AccountabilityParser();
