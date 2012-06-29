@@ -1,6 +1,9 @@
 package br.usp.sdext.core;
 
+import java.util.Collection;
+
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.exception.ConstraintViolationException;
 
 import br.usp.sdext.util.HibernateUtil;
@@ -19,6 +22,27 @@ public abstract class Model  {
 			session.getTransaction().rollback();
 			throw e;
 		}
+	}
+	
+	public static void bulkSave(Collection<Model> collection) {
+		
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Transaction tx = session.beginTransaction();
+		   
+		int count = 0;
+		for (Model model : collection) {
+			
+			session.save(model);
+			
+			if (count % 50 == 0 ) { //50, same as the JDBC batch size
+		        //flush a batch of inserts and release memory:
+		        session.flush();
+		        session.clear();
+		    }
+		}
+		
+		tx.commit();
+		session.close();
 	}
 	
 //	public static Model findByPK(Long id) {

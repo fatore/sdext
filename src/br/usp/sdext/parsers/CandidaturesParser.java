@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import br.usp.sdext.core.Model;
 import br.usp.sdext.models.Candidate;
 import br.usp.sdext.models.Candidature;
 import br.usp.sdext.models.Coalition;
@@ -21,33 +22,25 @@ public class CandidaturesParser extends AbstractParser {
 	
 	private int year;
 	
-	private Map<Candidate, Candidate> candidates;
-	private ArrayList<Candidate> duppers;
-	private Set<Status> candidatesStatus;
+	private Map<Model, Model> candidates;
+	private ArrayList<Model> duppers;
+	private Set<Model> candidatesStatus;
 	private Long numCandidates;
-	
-	private Map<Election, Election> elections;
-	
-	private Map<Coalition, Coalition> coalitions;
-	
-	private Map<Party, Party> parties;
-	
-	private Set<Candidature> candidatures;
+	private Map<Model, Model> elections;
+	private Map<Model, Model> coalitions;
+	private Map<Model, Model> parties;
+	private Set<Model> candidatures;
 	
 	public CandidaturesParser() {
 		
-		candidates = new HashMap<Candidate, Candidate>();
-		duppers = new ArrayList<Candidate>();
-		candidatesStatus = new HashSet<Status>();
+		candidates = new HashMap<>();
+		duppers = new ArrayList<>();
+		candidatesStatus = new HashSet<>();
 		numCandidates = 0L;
-		
-		elections = new HashMap<Election, Election>();
-		
-		parties = new HashMap<Party, Party>();
-		
-		coalitions = new HashMap<Coalition, Coalition>();
-		
-		candidatures = new HashSet<Candidature>();
+		elections = new HashMap<>();
+		parties = new HashMap<>();
+		coalitions = new HashMap<>();
+		candidatures = new HashSet<>();
 	}
 	
 	protected void loadFile(File file) throws Exception {
@@ -83,7 +76,7 @@ public class CandidaturesParser extends AbstractParser {
 			if (candidate == null) continue;
 			
 			// Look for the candidate in map ...
-			Candidate mapCandidate = candidates.get(candidate);
+			Candidate mapCandidate = (Candidate) candidates.get(candidate);
 			
 			// ... if didn't find anything.
 			if (mapCandidate == null) {
@@ -105,14 +98,9 @@ public class CandidaturesParser extends AbstractParser {
 					if (candidate.validate() > mapCandidate.validate()) {
 						
 						// Set the new information to the mapped candidate
-						candidates.get(mapCandidate).merge(candidate);
+						mapCandidate.merge(candidate);
 					} 
-					// Else the candidate must accept the mapped values
-					else {
-						
-						candidate = mapCandidate;
-					}
-					
+					candidate = mapCandidate;
 				} 
 				// Objects aren't similar! 
 				// VoterID is the same but not other attributes. !?
@@ -156,7 +144,7 @@ public class CandidaturesParser extends AbstractParser {
 			Election election = Election.parse(pieces);
 			
 			// Look if Election exists in map
-			Election mapElection = elections.get(election);
+			Election mapElection = (Election) elections.get(election);
 			
 			// If didn't find anything ..
 			if (mapElection == null) {
@@ -181,7 +169,7 @@ public class CandidaturesParser extends AbstractParser {
 			Party party = Party.parse(pieces);
 			
 			// Look if Election exists in map
-			Party mapParty = parties.get(party);
+			Party mapParty = (Party) parties.get(party);
 			
 			// If didn't find anything ..
 			if (mapParty == null) {
@@ -206,7 +194,7 @@ public class CandidaturesParser extends AbstractParser {
 			Coalition coalition = Coalition.parse(pieces);
 
 			// Look if exists in map
-			Coalition mapCoalition = coalitions.get(coalition);
+			Coalition mapCoalition = (Coalition) coalitions.get(coalition);
 
 			// If didn't find anything ..
 			if (mapCoalition == null) {
@@ -251,6 +239,8 @@ public class CandidaturesParser extends AbstractParser {
 	
 	protected void save() {
 		
+		long start = System.currentTimeMillis();   
+		
 		System.out.println("\nTotal objects loaded");
 		System.out.println("\tCandidates: " + candidates.size());
 		System.out.println("\tDuplicate Candidates: " + duppers.size());
@@ -259,61 +249,32 @@ public class CandidaturesParser extends AbstractParser {
 		System.out.println("\tCoalitions: " + coalitions.size());
 		System.out.println("\tCandidatures: " + candidatures.size());
 		
-		System.out.println("\nSaving objects in the database, this can take several minutes.");
+		System.out.println("\nSaving objects in the database, " +
+				"this can take several minutes.");
 		
-		///////////////////////////////////////////
-		// SAVING CANDIDATES  ////////////////////
-		//////////////////////////////////////////
 		System.out.println("\tSaving candidates...");
-		for (Candidate candidate : candidates.values()) {
-			
-			candidate.save();
-		}
-		/////////////////////////////////////////
-		// SAVING DUPPERS  /////////////////////
-		////////////////////////////////////////	
+		Model.bulkSave(candidates.values());
+		
 		System.out.println("\tSaving duppers...");
-		for (Candidate candidate : duppers) {
-			
-			candidate.save();
-		}
+		Model.bulkSave(duppers);
+		
 		System.out.println("\tSaving candidates status...");
-		for (Status status : candidatesStatus) {
-			
-			status.save();
-		}
-		///////////////////////////////////////////
-		// SAVING ELECTIONS  /////////////////////
-		//////////////////////////////////////////
+		Model.bulkSave(candidatesStatus);
+		
 		System.out.println("\tSaving elections...");
-		for (Election election : elections.values()) {
-			
-			election.save();
-		}
-		///////////////////////////////////////////
-		// SAVING ELECTIONS  /////////////////////
-		//////////////////////////////////////////
+		Model.bulkSave(elections.values());
+		
 		System.out.println("\tSaving parties...");
-		for (Party party : parties.values()) {
+		Model.bulkSave(parties.values());
 		
-			party.save();
-		}
-		///////////////////////////////////////////
-		// SAVING COALITIONS  /////////////////////
-		//////////////////////////////////////////
 		System.out.println("\tSaving coalitions...");
-		for (Coalition coalition : coalitions.values()) {
+		Model.bulkSave(coalitions.values());
 		
-			coalition.save();
-		}
-		///////////////////////////////////////////
-		// SAVING CANDIDATURES  ///////////////////
-		//////////////////////////////////////////
 		System.out.println("\tSaving candidatures...");
-		for (Candidature candidature : candidatures) {
-			
-			candidature.save();
-		}
-		System.out.println("Finished.");
+		Model.bulkSave(candidatures);
+		
+		long elapsedTime = System.currentTimeMillis() - start;
+		
+		System.out.println("Finished after " + (elapsedTime / 1000) / 60 + " mins.");
 	}
 }
