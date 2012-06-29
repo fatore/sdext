@@ -77,8 +77,8 @@ public class Coalition extends Model implements Serializable {
 
 		Long code  = Misc.parseLong(pieces[19]);
 		String acronym = Misc.parseStr(pieces[20]);
-		String name = Misc.parseStr(pieces[21]);
-		String composition = Misc.parseStr(pieces[22]);
+		String composition = Misc.parseStr(pieces[21]);
+		String name = Misc.parseStr(pieces[22]);
 		
 		return new Coalition(code, acronym, name, composition);
 	}

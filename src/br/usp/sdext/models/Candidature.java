@@ -29,6 +29,9 @@ public class Candidature extends Model implements Serializable {
 	@ManyToOne
 	private Election election;
 	
+	@ManyToOne
+	private Coalition coalition;
+	
 	@Id
 	@ManyToOne
 	private Party party;
@@ -68,6 +71,7 @@ public class Candidature extends Model implements Serializable {
 	// getters
 	public Election getElection() {return election;}
 	public Candidate getCandidate() {return candidate;}
+	public Coalition getCoalition() {return coalition;}
 	public String getBallotName() {return ballotName;}
 	public Party getParty() {return party;}
 	public Integer getBallotNo() {return ballotNo;}
@@ -81,6 +85,7 @@ public class Candidature extends Model implements Serializable {
 	// setters
 	public void setElection(Election election) {this.election = election;}
 	public void setCandidate(Candidate candidate) {this.candidate = candidate;}
+	public void setCoalition(Coalition coalition) {this.coalition = coalition;}
 	public void setParty(Party party) {this.party = party;}
 	public void setBallotName(String ballotName) {this.ballotName = ballotName;}
 	public void setBallotNo(Integer ballotNo) {this.ballotNo = ballotNo;}

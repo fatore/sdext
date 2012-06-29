@@ -170,39 +170,9 @@ public class CandidaturesParser extends AbstractParser {
 			} 
 			// If found ... 
 			else {
-				System.err.println("jah existe! dah uma debugada");
 				// ...  set as the mapped object.
 				election = mapElection;
 			}
-			
-
-			///////////////////////////////////////////
-			// PARSING COALITIONS  /////////////////
-			//////////////////////////////////////////
-			
-			// Parse data.
-			Coalition coalition = Coalition.parse(pieces);
-			
-			// Look if Election exists in map
-			Coalition mapCoalition = coalitions.get(coalition);
-			
-			// If didn't find anything ..
-			if (mapCoalition == null) {
-				
-				// Set the ID for the new Election ...
-				coalition.setID(new Long(coalitions.size()));
-				
-				// ... and put it in the map.
-				coalitions.put(coalition, coalition);
-				
-			} 
-			// If found ... 
-			else {
-				System.err.println("jah existe! dah uma debugada");
-				// ...  set as the mapped object.
-				coalition = mapCoalition;
-			}
-			
 			///////////////////////////////////////////
 			// PARSING PARTIES  ////////////////////
 			//////////////////////////////////////////
@@ -225,9 +195,33 @@ public class CandidaturesParser extends AbstractParser {
 			} 
 			// If found ... 
 			else {
-				System.err.println("jah existe! dah uma debugada");
 				// ...  set as the mapped object.
 				party = mapParty;
+			}
+			///////////////////////////////////////////
+			// PARSING COALITIONS  /////////////////
+			//////////////////////////////////////////
+
+			// Parse data.
+			Coalition coalition = Coalition.parse(pieces);
+
+			// Look if exists in map
+			Coalition mapCoalition = coalitions.get(coalition);
+
+			// If didn't find anything ..
+			if (mapCoalition == null) {
+
+				// Set the ID for the new Election ...
+				coalition.setID(new Long(coalitions.size()));
+
+				// ... and put it in the map.
+				coalitions.put(coalition, coalition);
+
+			} 
+			// If found ... 
+			else {
+				// ...  set as the mapped object.
+				coalition = mapCoalition;
 			}
 			///////////////////////////////////////////
 			// PARSING CANDIDATURES  /////////////////
@@ -240,6 +234,7 @@ public class CandidaturesParser extends AbstractParser {
 			candidature.setCandidate(candidate);
 			candidature.setElection(election);
 			candidature.setParty(party);
+			candidature.setCoalition(coalition);
 			
 			// Add candidature if does not exists already
 			if (!candidatures.contains(candidature)) {
@@ -247,20 +242,12 @@ public class CandidaturesParser extends AbstractParser {
 			} else {
 				System.err.println("jah existe! dah uma debugada");
 			}
-			
-			System.out.println(candidate.toString());
-			System.out.println(status.toString());
-			System.out.println(election.toString());
-			System.out.println(coalition.toString());
-			System.out.println(party.toString());
-			System.out.println();
 		}
 		
 		if (in != null) {
 			in.close();
 		}
 	}
-	
 	
 	protected void save() {
 		
@@ -269,6 +256,7 @@ public class CandidaturesParser extends AbstractParser {
 		System.out.println("\tDuplicate Candidates: " + duppers.size());
 		System.out.println("\tElections: " + elections.size());
 		System.out.println("\tParties: " + parties.size());
+		System.out.println("\tCoalitions: " + coalitions.size());
 		System.out.println("\tCandidatures: " + candidatures.size());
 		
 		System.out.println("\nSaving objects in the database, this can take several minutes.");
@@ -309,6 +297,14 @@ public class CandidaturesParser extends AbstractParser {
 		for (Party party : parties.values()) {
 		
 			party.save();
+		}
+		///////////////////////////////////////////
+		// SAVING COALITIONS  /////////////////////
+		//////////////////////////////////////////
+		System.out.println("\tSaving coalitions...");
+		for (Coalition coalition : coalitions.values()) {
+		
+			coalition.save();
 		}
 		///////////////////////////////////////////
 		// SAVING CANDIDATURES  ///////////////////

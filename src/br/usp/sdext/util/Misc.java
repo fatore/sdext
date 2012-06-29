@@ -8,19 +8,86 @@ import java.util.regex.Pattern;
 
 public class Misc {
 	
+	private static final Calendar now = Calendar.getInstance();
+	
 	public static Date parseDate(String str) { // TODO: verificar quando ano eh 0002 por exemplo
 		
 		if (str.equals("")) {
 			return null;
 		}
 		try {
-			return new SimpleDateFormat("dd/MM/yy").parse(str);
+			Date date =  new SimpleDateFormat("dd/MM/yy").parse(str);
+			
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(date);
+			
+			int year = cal.get(Calendar.YEAR);
+			
+			if (cal.after(now)) {
+				  System.err.println("Can't be born in the future");
+				  return null;
+			}
+			
+			if (year < 100) {
+				
+				year = year + 1900;
+			}
+			
+			cal.set(Calendar.YEAR, year);  
+			
+			date = new Date(cal.getTime().getTime());
+			
+			return date;
+			
 		} catch (Exception e) {
 			try {
-				return new SimpleDateFormat("ddMMyyyy").parse(str);
+				Date date =  new SimpleDateFormat("ddMMyyyy").parse(str);
+				
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(date);
+				
+				int year = cal.get(Calendar.YEAR);
+				
+				if (cal.after(now)) {
+					  System.err.println("Can't be born in the future");
+					  return null;
+				}
+				
+				if (year < 100) {
+					
+					year = year + 1900;
+				}
+				
+				cal.set(Calendar.YEAR, year);  
+				
+				date = new Date(cal.getTime().getTime());
+				
+				return date;
 			} catch (Exception e2) {
 				try {
-					return new SimpleDateFormat("dd-MMM-yy").parse(str);
+					
+					Date date =  new SimpleDateFormat("dd-MMM-yy").parse(str);
+					
+					Calendar cal = Calendar.getInstance();
+					cal.setTime(date);
+					
+					int year = cal.get(Calendar.YEAR);
+					
+					if (cal.after(now)) {
+						year -= 100;
+					}
+					
+					if (year < 100) {
+						
+						year = year + 1900;
+					}
+					
+					cal.set(Calendar.YEAR, year);  
+					
+					date = new Date(cal.getTime().getTime());
+					
+					return date;
+					
 				} catch (Exception e3){
 					return null;
 				}
@@ -78,8 +145,6 @@ public class Misc {
 	}
 	
 	public static Integer getAge(Date birthDate) {
-		
-		Calendar now = Calendar.getInstance();
 		
 		Calendar dob = Calendar.getInstance();
 		dob.setTime(birthDate);

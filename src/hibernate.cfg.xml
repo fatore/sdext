@@ -36,9 +36,13 @@
 	<mapping class="br.usp.sdext.models.ghosts.GhostCandidate"/>
 	
 	<mapping class="br.usp.sdext.models.Election"/>
+	
 	<mapping class="br.usp.sdext.models.Party"/>
 	
+	<mapping class="br.usp.sdext.models.Coalition"/>
+	
 	<mapping class="br.usp.sdext.models.Candidature"/>
+	
 	<mapping class="br.usp.sdext.models.Donor"/>
 	<mapping class="br.usp.sdext.models.Income"/>
 	

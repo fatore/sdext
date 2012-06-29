@@ -10,7 +10,7 @@ public class App {
 		AbstractParser parser;
 		
 		parser = new CandidaturesParser();
-		String baseDir = "data/candidatos/3000";
+		String baseDir = "data/candidatos/2010";
 		parser.loadAndSave(baseDir);
 		
 //		parser = new AccountabilityParser();
