@@ -4,27 +4,34 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import br.usp.sdext.core.Model;
 import br.usp.sdext.models.Candidature;
 import br.usp.sdext.models.Donor;
 import br.usp.sdext.models.Income;
-import br.usp.sdext.util.FileOperations;
 
 
 public class AccountabilityParser extends AbstractParser {
 	
-	private Map<Donor, Donor> donors;
-	private Long incomesCounter;
+	private Map<Model, Model> donors;
+	private ArrayList<Model> incomes;
+	
+	private ArrayList<Binding> bindings;
+	
 	private boolean old;
 	
 	public AccountabilityParser() {
-		donors = new HashMap<Donor, Donor>();
-		incomesCounter = 0L;
+		
+		donors = new HashMap<>();
+		incomes = new ArrayList<>();
+		bindings = new ArrayList<>();
 	}
 	
 	protected void loadFile(File file) throws Exception {	
+		
 		if (file.getName().matches(".*(?iu)csv")) {	
 			old = true;
 		}
@@ -36,10 +43,13 @@ public class AccountabilityParser extends AbstractParser {
 	
 	private void parseFile(File file) throws Exception {
 		
-		int year = Integer.parseInt(file.getParentFile().getParentFile().getParentFile().getName());
+		int year = Integer.parseInt(file.getParentFile().getParentFile().
+				getParentFile().getName());
 		
 		if (old) {
+			
 			if (file.getParentFile().getParentFile().getName().matches("(?iu)candidato")) {
+				
 				if (file.getParentFile().getName().matches("(?iu)receita")) {
 					parseIncome(file, year);
 				}  
@@ -47,12 +57,15 @@ public class AccountabilityParser extends AbstractParser {
 					parseExpense(file, year);
 				} 
 			}
-		} else {
+		} 
+		else {
+			
 			if (file.getParentFile().getParentFile().getName().matches("(?iu)candidato")) {
-				if (file.getName().matches("(?iu)receitas.*")) {
+
+				if (file.getName().matches("(?iu)receitas(.)*(\\.(?i)txt)")) {
 					parseIncome(file, year);
 				}  
-				if (file.getName().matches("(?iu)despesas.*")) {
+				if (file.getName().matches("(?iu)despesas(.)*(\\.(?i)txt)")) {
 					parseExpense(file, year);
 				} 
 			}
@@ -62,80 +75,110 @@ public class AccountabilityParser extends AbstractParser {
 	private void parseIncome(File file, int year) throws Exception {
 		
 		BufferedReader in;
+		
 		if (old) {
-			in = new BufferedReader(new InputStreamReader(new FileInputStream(file), "ISO-8859-1"));
-		} else {
-			in = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
+			
+			in = new BufferedReader(new InputStreamReader(
+					new FileInputStream(file), "ISO-8859-1"));
+		} 
+		else {
+			
+			in = new BufferedReader(new InputStreamReader(
+					new FileInputStream(file), "UTF-8"));
 		}
+		
 		String line = null;
 		
-		int noLines = FileOperations.getNoLines(file.getAbsolutePath());
-		
 		if (old) {
+			
 			System.out.println("Parsing candidates incomes of year " + year + ".");
+			
 		} else {
+			
 			System.out.println("Parsing candidates incomes of year " + year + 
 					" for " + file.getParentFile().getName() + ".");
 		}
-		System.out.println("Progress: ");
 		
 		// ignore first line
 		line = in.readLine();
-		int count = 0;
+		
 		while ((line = in.readLine()) != null) {
 			
-			// donor
-			Donor donor = Donor.parse(line, old);
-			Donor mapDonor = donors.get(donor);
+			// Break line where finds ";"
+			String pieces[] = line.split("\";\"");	
+			
+			///////////////////////////////////////////
+			// PARSING DONORS  /////////////////////
+			//////////////////////////////////////////
+			
+			// Parse data.
+			Donor donor = Donor.parse(pieces, old);
+			
+			// Look for the object in map ...
+			Donor mapDonor = (Donor) donors.get(donor);
+			
+			// ... if didn't find anything.
 			if (mapDonor == null) {
+				
+				// Set the ID for the new object ...
 				donor.setID(new Long(donors.size()));
+				
+				// ... and put it in the map.
 				donors.put(donor, donor);
-				donor.save();
-			} else {
+			} 
+			// If found ... 
+			else {
+				// ...  set as the mapped object.
 				donor = mapDonor;
 			}
 			
-			// income
-			Income income = Income.parse(line, old);
-			income.setID(incomesCounter++);
+			///////////////////////////////////////////
+			// PARSING INCOMES  /////////////////////
+			//////////////////////////////////////////
+			
+			// Parse data.
+			Income income = Income.parse(pieces, old);
+
+			// Set income donor's.
 			income.setDonor(donor);
-			income.save();
 			
-			// binding
-			Candidature.addIncome(income, line, year, old);
+			// Set the ID for the new object ...
+			income.setID(new Long(incomes.size()));
 			
-			if (count++ % (noLines / 10)  == 0) {
-				System.out.printf("\t%.2f%%\n", (float) ((count / (float) noLines) * 100));
-			}
+			// Add to the list.
+			incomes.add(income);
+			
+			// Create binding
+			Binding binding = new Binding(income, pieces, year, old);
+			bindings.add(binding);
 		}
 	}
 	
 	private void parseExpense(File file, int year) throws Exception {}
 	
 	protected void save() {
+		
 		System.out.println("\nTotal objects loaded");
 		System.out.println("\tDonors: " + donors.size());
-		System.out.println("\tIncomes: " + incomesCounter);
+		System.out.println("\tIncomes: " + incomes.size());
 		
-		System.out.println("\nSaving objects in the database, this can take several minutes.");
+		System.out.println("\nSaving objects in the database, " +
+				"this can take several minutes.");
 		
-		long start, finish;
+		System.out.println("\tSaving donors...");
+		Model.bulkSave(donors.values());
 		
-		// donors
-		System.out.print("\tSaving donors...");
-		start = System.currentTimeMillis();
-		for (Donor donor : donors.values()) {
-			donor.save();
+		System.out.println("\tSaving incomes...");
+		Model.bulkSave(incomes);
+		
+		System.out.println("\tBinding objects...");
+		for (Binding binding : bindings) {
+			
+			Candidature.addIncome(binding);
 		}
-		finish = System.currentTimeMillis();
-		System.out.printf("Finished!(%d mins %d secs)\n",
-				(int) ((finish - start) / 60000),(int) ((finish - start) % 60000) / 1000);
-	}
-
-	public static void main(String[] args) throws Exception {
-		
-		String baseDir = "/work1/wokspace/social-vis/data/eleitorais/prestacao_contas/2010";
-		AbstractParser parser = new AccountabilityParser();
-		parser.loadAndSave(baseDir);
 	}
 }
+
+
+
+

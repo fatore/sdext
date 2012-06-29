@@ -153,11 +153,6 @@ public class Election extends Model implements Serializable {
 	
 	public static Election parse(String[] pieces) {
 		
-		// remove double quotes
-		for (int i = 0; i < pieces.length; i++) {
-			pieces[i] = pieces[i].replace("\"", "");
-		}
-
 		Integer year = Misc.parseInt(pieces[2]);
 		Integer round = Misc.parseInt(pieces[3]);	
 		String description = Misc.parseStr(pieces[4]);

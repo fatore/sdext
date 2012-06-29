@@ -47,6 +47,8 @@ public class Status extends Model implements Serializable {
 	
 	// private Estate[] candidateEstate;
 	
+	public Status() {}
+	
 	public Status(Integer year, Long currentJobID, String currentJob, Integer age, 
 			Long schoolingID, String schooling, Long maritalID, String marital, Long tseID) {
 		
@@ -60,8 +62,6 @@ public class Status extends Model implements Serializable {
 		this.marital = marital;
 		this.tseID = tseID;
 	}	
-	
-	public Status() {}
 	
 	// getters
 	public Long getCurrentJobID() {return currentJobID;}
@@ -87,6 +87,7 @@ public class Status extends Model implements Serializable {
 	
 	@Override
 	public int hashCode() {
+		
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
@@ -97,6 +98,7 @@ public class Status extends Model implements Serializable {
 
 	@Override
 	public boolean equals(Object obj) {
+		
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -119,12 +121,14 @@ public class Status extends Model implements Serializable {
 
 	@Override
 	public String toString() {
+		
 		return year + ", "	+ age + ", " + currentJobID + ", "  
 				+ currentJob + ", " + schoolingID + ", " + schooling +
 				", " + maritalID + ", " + marital + ", " + tseID ;
 	}
 
 	public static Status findByPK(Status id) {
+		
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		
@@ -137,6 +141,7 @@ public class Status extends Model implements Serializable {
 	
 	@SuppressWarnings("unchecked")
 	public static List<Status> findAll() {
+		
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		
@@ -148,7 +153,6 @@ public class Status extends Model implements Serializable {
 	}
 
 	public static Status parse(String[] pieces, Integer year) {
-		
 
 		Long currentJobID = Misc.parseLong(pieces[23]);
 		String currentJob = Misc.parseStr(pieces[24]);

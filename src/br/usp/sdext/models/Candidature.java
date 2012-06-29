@@ -13,6 +13,7 @@ import org.hibernate.Session;
 
 import br.usp.sdext.core.Model;
 import br.usp.sdext.models.ghosts.GhostCandidate;
+import br.usp.sdext.parsers.Binding;
 import br.usp.sdext.util.HibernateUtil;
 import br.usp.sdext.util.Misc;
 
@@ -51,7 +52,9 @@ public class Candidature extends Model implements Serializable {
 	@OneToMany
 	private List<Income> incomes = new ArrayList<Income>(); 
 	
-	// private Expenses[] campaignIcome
+	// private Expenses[] expenses
+	
+	public Candidature() {}
 	
 	public Candidature(String ballotName, Integer ballotNo,  
 			Long situationID, String situation, Float maxExpenses,
@@ -65,8 +68,6 @@ public class Candidature extends Model implements Serializable {
 		this.resultID = resultID;
 		this.result = result;
 	}	
-	
-	public Candidature() {}
 	
 	// getters
 	public Election getElection() {return election;}
@@ -191,24 +192,26 @@ public class Candidature extends Model implements Serializable {
 				maxExpenses, resultID, result);
 	}
 	
-	@SuppressWarnings("unchecked")
-	public static void addIncome(Income income, String line, Integer year, boolean old) {
+	public static void addIncome(Binding binding ) {
 		
-		// break line where finds ";"
-		String pieces[] = line.split("\";\"");
-
-		// remove double quotes
-		for (int i = 0; i < pieces.length; i++) {
-			pieces[i] = pieces[i].replace("\"", "");
-		}
+		addIncome(binding.income, binding.pieces, binding.year, binding.old);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static void addIncome(Income income, String[] pieces, Integer year, boolean old) {
+		
 		String post = null;
 		String candidateName = null;
 		Integer ballotNo = null;
+		
 		if (old) {
+			
 			post = Misc.parseStr(pieces[2]);
 			candidateName = Misc.parseStr(pieces[3]);
 			ballotNo = Misc.parseInt(pieces[4]);
-		} else {
+		} 
+		else {
+			
 			post = Misc.parseStr(pieces[4]);
 			candidateName = Misc.parseStr(pieces[5]);
 			ballotNo = Misc.parseInt(pieces[3]);
@@ -232,8 +235,10 @@ public class Candidature extends Model implements Serializable {
 		
 		
 		if (candidatures.size() == 1) {
+			
 			candidatures.get(0).getIncomes().add(income);
-		} else {
+		} 
+		else {
 			session.save(new GhostCandidate(candidateName, ballotNo, income));
 		}
 		if (candidatures.size() > 1){
@@ -241,7 +246,6 @@ public class Candidature extends Model implements Serializable {
 		}
 		
 		session.getTransaction().commit();
-		
 	}
 }
 

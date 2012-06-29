@@ -288,11 +288,6 @@ public class Candidate  extends Model implements Comparable<Candidate>, Serializ
 	
 	public static Candidate parse(String[] pieces) {
 		
-		// remove double quotes
-		for (int i = 0; i < pieces.length; i++) {
-			pieces[i] = pieces[i].replace("\"", "");
-		}
-
 		// retrieve general data
 		String name = Misc.parseStr(pieces[10]);
 		Date birthDate = Misc.parseDate(pieces[25]);

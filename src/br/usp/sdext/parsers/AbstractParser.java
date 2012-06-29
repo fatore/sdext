@@ -4,7 +4,7 @@ import java.io.File;
 
 public abstract class AbstractParser { 
 	
-	public void loadAndSave(String baseDirStr) throws Exception {
+	public void parseAndSave(String baseDirStr) throws Exception {
 		
 		File baseDir = null;
 		

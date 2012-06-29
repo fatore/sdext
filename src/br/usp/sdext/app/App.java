@@ -1,6 +1,7 @@
 package br.usp.sdext.app;
 
 import br.usp.sdext.parsers.AbstractParser;
+import br.usp.sdext.parsers.AccountabilityParser;
 import br.usp.sdext.parsers.CandidaturesParser;
 
 public class App {
@@ -8,14 +9,15 @@ public class App {
 	public void readData() throws Exception {
 		
 		AbstractParser parser;
+		String baseDir;
 		
 		parser = new CandidaturesParser();
-		String baseDir = "data/candidatos/2010";
-		parser.loadAndSave(baseDir);
+		baseDir = "data/candidatos/2010";
+		parser.parseAndSave(baseDir);
 		
-//		parser = new AccountabilityParser();
-//		baseDir = "/home/fatore/workspace/sdext/data/eleitorais/prestacao_contas";
-//		parser.loadAndSave(baseDir);
+		parser = new AccountabilityParser();
+		baseDir = "data/prestacao_contas";
+		parser.parseAndSave(baseDir);
 	}
 	
 	public static void main(String[] args) throws Exception {

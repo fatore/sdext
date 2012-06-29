@@ -21,6 +21,8 @@ public class Coalition extends Model implements Serializable {
 	private String name;
 	private String composition;
 	
+	public Coalition() {}
+	
 	public Coalition(Long code, String acronym, String name, String composition) {
 		
 		this.code = code;

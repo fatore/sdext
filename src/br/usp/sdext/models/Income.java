@@ -25,13 +25,13 @@ public class Income extends Model implements Serializable {
 	private String type;
 	private Date date;
 	
+	public Income() {}
+	
 	public Income(Float value, String type, Date date) {
 		this.value = value;
 		this.type = type;
 		this.date = date;
 	}
-	
-	public Income() {}
 	
 	// getters
 	public Long getID() {return id;}
@@ -53,18 +53,12 @@ public class Income extends Model implements Serializable {
 		return donor.getName() + ", " + value + ", " + type;
 	}
 
-	public static Income parse(String line, boolean old) {
-		// break line where finds ";"
-		String pieces[] = line.split("\";\"");
+	public static Income parse(String[] pieces, boolean old) {
 
-		// remove double quotes
-		for (int i = 0; i < pieces.length; i++) {
-			pieces[i] = pieces[i].replace("\"", "");
-		}
-		
 		Date date = null;
 		Float value = null;
 		String type = null;
+		
 		if (old){
 			date = Misc.parseDate(pieces[5]);
 			value = Misc.parseFloat(pieces[9]);

@@ -24,6 +24,8 @@ public class Party extends Model implements Serializable {
 	private String acronym;
 	private String name;	
 	
+	public Party() {}
+	
 	public Party(Integer partyNo, String partyAcronym, String partyName) {
 		
 		this.no = partyNo;

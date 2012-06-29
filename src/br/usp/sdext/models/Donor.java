@@ -41,21 +41,40 @@ public class Donor extends Model implements Serializable {
 	public void setName(String name) {this.name = name;}
 	public void setCpf(Long cpf) {this.cpf = cpf;}
 	public void setUf(String uf) {this.uf = uf;}
-	
-	
+
+	@Override
+	public int hashCode() {
+		
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((cpf == null) ? 0 : cpf.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Donor other = (Donor) obj;
+		if (cpf == null) {
+			if (other.cpf != null)
+				return false;
+		} else if (!cpf.equals(other.cpf))
+			return false;
+		return true;
+	}
 
 	public String toString() {
 		return name + ", " + uf + ", " + cpf;
 	}
 	
-	public static Donor parse(String line, boolean old) {
-		// break line where finds ";"
-		String pieces[] = line.split("\";\"");
+	public static Donor parse(String[] pieces, boolean old) {
 
-		// remove double quotes
-		for (int i = 0; i < pieces.length; i++) {
-			pieces[i] = pieces[i].replace("\"", "");
-		}
 		Long donorCPF = null;
 		String donorUF = null;
 		String donorName = null;

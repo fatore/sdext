@@ -47,7 +47,7 @@ public class CandidaturesParser extends AbstractParser {
 		
 		year = Integer.parseInt(file.getParentFile().getName());
 		
-		if (file.getName().matches(".*(?iu)txt")) {
+		if (file.getName().matches("([^\\s]+(\\.(?i)txt))")) {
 			
 			System.out.println("Parsing file " + file.getName());
 			parseFile(file);
@@ -65,6 +65,11 @@ public class CandidaturesParser extends AbstractParser {
 			// Break line where finds ";"
 			String pieces[] = line.split("\";\"");
 			
+			// remove double quotes
+			for (int i = 0; i < pieces.length; i++) {
+				pieces[i] = pieces[i].replace("\"", "");
+			}
+			
 			///////////////////////////////////////////
 			// PARSING CANDIDATE  /////////////////////
 			//////////////////////////////////////////
@@ -81,7 +86,7 @@ public class CandidaturesParser extends AbstractParser {
 			// ... if didn't find anything.
 			if (mapCandidate == null) {
 				
-				// Set a ID for the new Candidate ...
+				// Set the ID for the new Candidate ...
 				candidate.setID(numCandidates++);
 				
 				// ... and put it in the map.
@@ -112,7 +117,7 @@ public class CandidaturesParser extends AbstractParser {
 					mapCandidate.setDupper(true);
 					candidate.setDupper(true);
 					
-					// Set a ID for the new Candidate ...
+					// Set the ID for the new Candidate ...
 					candidate.setID(numCandidates++);
 					
 					// ... and add the new Candidate to a duppers list
@@ -275,6 +280,7 @@ public class CandidaturesParser extends AbstractParser {
 		
 		long elapsedTime = System.currentTimeMillis() - start;
 		
-		System.out.println("Finished after " + (elapsedTime / 1000) / 60 + " mins.");
+		System.out.printf("Finished saving after %d mins and %d secs\n",
+			+  (int) (elapsedTime / 60000),(int) (elapsedTime % 60000) / 1000);
 	}
 }
