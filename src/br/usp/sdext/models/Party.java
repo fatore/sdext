@@ -1,15 +1,11 @@
 package br.usp.sdext.models;
 
 import java.io.Serializable;
-import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-import org.hibernate.Session;
-
 import br.usp.sdext.core.Model;
-import br.usp.sdext.util.HibernateUtil;
 import br.usp.sdext.util.Misc;
 
 @Entity
@@ -38,7 +34,7 @@ public class Party extends Model implements Serializable {
 	public String getAcronym() {return acronym;}
 	public String getName() {return name;}
 	
-	public void setID(Long id) {this.id = id;}
+	public void setId(Long id) {this.id = id;}
 	public void setNo(Integer partyNo) {this.no = partyNo;}
 	public void setAcronym(String partyAcronym) {this.acronym = partyAcronym;}
 	public void setName(String partyName) {this.name = partyName;}
@@ -72,31 +68,6 @@ public class Party extends Model implements Serializable {
 	public String toString() {
 		
 		return no + ", " + acronym + ", " + name;
-	}
-
-	public static Party findByPK(Long id) {
-		
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		session.beginTransaction();
-		
-		Party party = (Party) session.get(Party.class, id);
-		
-		session.getTransaction().commit();
-		
-		return party;
-	}
-	
-	@SuppressWarnings("unchecked")
-	public static List<Party> findAll() {
-		
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		session.beginTransaction();
-		
-		List<Party> parties = (List<Party>) session.createCriteria(Election.class).list();
-		
-		session.getTransaction().commit();
-		
-		return parties;
 	}
 
 	public static Party parse(String[] pieces) {

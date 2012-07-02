@@ -1,6 +1,5 @@
 /tmp
 /modules
-/lib
 /test-result
 /logs
 /eclipse
@@ -8,3 +7,7 @@
 /results
 /temp
 /data
+.classpath
+.git
+.project
+.settings

@@ -1,5 +1,6 @@
 package br.usp.sdext.util;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -10,7 +11,7 @@ public class Misc {
 	
 	private static final Calendar now = Calendar.getInstance();
 	
-	public static Date parseDate(String str) { // TODO: verificar quando ano eh 0002 por exemplo
+	public static Date parseDate(String str) throws Exception {
 		
 		if (str.equals("")) {
 			return null;
@@ -24,8 +25,7 @@ public class Misc {
 			int year = cal.get(Calendar.YEAR);
 			
 			if (cal.after(now)) {
-				  System.err.println("Can't be born in the future");
-				  return null;
+				  throw new Exception("Can't be born in the future");
 			}
 			
 			if (year < 100) {
@@ -39,7 +39,7 @@ public class Misc {
 			
 			return date;
 			
-		} catch (Exception e) {
+		} catch (IllegalArgumentException | ParseException e) {
 			try {
 				Date date =  new SimpleDateFormat("ddMMyyyy").parse(str);
 				
@@ -49,8 +49,7 @@ public class Misc {
 				int year = cal.get(Calendar.YEAR);
 				
 				if (cal.after(now)) {
-					  System.err.println("Can't be born in the future");
-					  return null;
+					throw new Exception("Can't be born in the future");
 				}
 				
 				if (year < 100) {
@@ -63,7 +62,8 @@ public class Misc {
 				date = new Date(cal.getTime().getTime());
 				
 				return date;
-			} catch (Exception e2) {
+				
+			} catch (IllegalArgumentException | ParseException e2) {
 				try {
 					
 					Date date =  new SimpleDateFormat("dd-MMM-yy").parse(str);
@@ -89,7 +89,8 @@ public class Misc {
 					return date;
 					
 				} catch (Exception e3){
-					return null;
+					
+					throw new Exception();
 				}
 			}
 		}
@@ -98,49 +99,75 @@ public class Misc {
 	public static String parseStr(String str) {
 		
 		Pattern pattern = Pattern.compile("\\s+");
+		
 		Matcher matcher = pattern.matcher(str);
+		
 		str = matcher.replaceAll(" ");
 		
-		pattern = Pattern.compile("\\bNï¿½O\\b");
+		pattern = Pattern.compile("\\bNÃO\\b");
+		
 		matcher = pattern.matcher(str);
-		if (matcher.find()) {
-			return null;
-		}
-		if (str.contains("#")) {
-			return null;
-		}
-		if (str.equals("#NE#") || str.equals("#NI#") || str.equals("")) {
-			return null;
-		}
+		
+		if (matcher.find()) return null;
+		
+		if (str.contains("#")) return null;
+				
+		if (str.equals("#NE#") || str.equals("#NI#") || str.equals("")) return null;
+		
 		return str.trim().toUpperCase();
 	}
 	
 	public static Long parseLong(String str) {
 		
 		if ((str = parseStr(str)) == null) return null;
+		
 		str = str.replace(" ", "");
-		str = str.replace("-", "");
-		if (str.equals("")) return null;
-		Long no =  Long.parseLong(str);
-		return (no <= 0 ) ? null : no;
+		
+		Long no;
+		
+		try {
+			
+			no =  Long.parseLong(str);
+			
+			return (no <= 0 ) ? null : no;
+			
+		} catch (Exception e) {
+		
+			str = str.replace("-", "");
+			
+			if (str.equals("")) return null;
+			
+			no =  Long.parseLong(str);
+			
+			return (no <= 0 ) ? null : no;
+		}
 	}
 	
 	public static Integer parseInt(String str) {
 		
 		if ((str = parseStr(str)) == null) return null;
+		
 		str = str.replace(" ", "");
+		
 		if (str.equals("")) return null;
+		
 		Integer no = Integer.parseInt(str);
+		
 		return (no <= 0 ) ? null : no;
 	}
 	
 	public static Float parseFloat(String str) {
 		
 		if ((str = parseStr(str)) == null) return null;
+		
 		str = str.replace(" ", "");
+		
 		str = str.replace(",", ".");
+		
 		if (str.equals("")) return null;
+		
 		Float no = Float.parseFloat(str); 
+		
 		return (no <= 0 ) ? null : no;
 	}
 	

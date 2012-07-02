@@ -1,6 +1,6 @@
 package br.usp.sdext.parsers;
 
-import br.usp.sdext.models.Income;
+import br.usp.sdext.models.candidature.Income;
 
 public class Binding {
 

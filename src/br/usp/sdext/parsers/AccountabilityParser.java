@@ -9,9 +9,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import br.usp.sdext.core.Model;
-import br.usp.sdext.models.Candidature;
 import br.usp.sdext.models.Donor;
-import br.usp.sdext.models.Income;
+import br.usp.sdext.models.candidature.Candidature;
+import br.usp.sdext.models.candidature.Income;
 
 
 public class AccountabilityParser extends AbstractParser {
@@ -121,7 +121,7 @@ public class AccountabilityParser extends AbstractParser {
 			if (mapDonor == null) {
 				
 				// Set the ID for the new object ...
-				donor.setID(new Long(donors.size()));
+				donor.setId(new Long(donors.size()));
 				
 				// ... and put it in the map.
 				donors.put(donor, donor);
@@ -143,7 +143,7 @@ public class AccountabilityParser extends AbstractParser {
 			income.setDonor(donor);
 			
 			// Set the ID for the new object ...
-			income.setID(new Long(incomes.size()));
+			income.setId(new Long(incomes.size()));
 			
 			// Add to the list.
 			incomes.add(income);

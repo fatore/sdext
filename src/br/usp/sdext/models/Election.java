@@ -1,16 +1,12 @@
 package br.usp.sdext.models;
 
 import java.io.Serializable;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-import org.hibernate.Session;
-
 import br.usp.sdext.core.Model;
-import br.usp.sdext.util.HibernateUtil;
 import br.usp.sdext.util.Misc;
 
 @Entity
@@ -65,7 +61,7 @@ public class Election extends Model implements Serializable {
 	public String getPost() {return post;}
 	
 	// setters
-	public void setID(Long id) {this.id = id;}
+	public void setId(Long id) {this.id = id;}
 	public void setYear(Integer year) {this.year = year;}
 	public void setRound(Integer round) {this.round = round;}
 	public void setUf(String uf) {this.uf = uf;}
@@ -124,31 +120,6 @@ public class Election extends Model implements Serializable {
 		} else if (!year.equals(other.year))
 			return false;
 		return true;
-	}
-
-	public static Election findByPK(Long id) {
-		
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		session.beginTransaction();
-		
-		Election election = (Election) session.get(Election.class, id);
-		
-		session.getTransaction().commit();
-		
-		return election;
-	}
-	
-	@SuppressWarnings("unchecked")
-	public static List<Election> findAll() {
-		
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		session.beginTransaction();
-		
-		List<Election> elections = (List<Election>) session.createCriteria(Election.class).list();
-		
-		session.getTransaction().commit();
-		
-		return elections;
 	}
 	
 	public static Election parse(String[] pieces) {

@@ -12,12 +12,12 @@ public class App {
 		String baseDir;
 		
 		parser = new CandidaturesParser();
-		baseDir = "data/candidatos/2010";
+		baseDir = "data/candidatos/candidaturas/2008";
 		parser.parseAndSave(baseDir);
 		
 		parser = new AccountabilityParser();
 		baseDir = "data/prestacao_contas";
-		parser.parseAndSave(baseDir);
+//		parser.parseAndSave(baseDir);
 	}
 	
 	public static void main(String[] args) throws Exception {

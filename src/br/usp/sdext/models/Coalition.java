@@ -37,7 +37,7 @@ public class Coalition extends Model implements Serializable {
 	public String getName() {return name;}
 	public String getComposition() {return composition;}
 
-	public void setID(Long id) {this.id = id;}
+	public void setId(Long id) {this.id = id;}
 	public void setCode(Long code) {this.code = code;}
 	public void setAcronym(String acronym) {this.acronym = acronym;}
 	public void setName(String name) {this.name = name;}

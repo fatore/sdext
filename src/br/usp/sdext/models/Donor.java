@@ -37,7 +37,7 @@ public class Donor extends Model implements Serializable {
 	public String getUf() {return uf;}
 
 	// setters 
-	public void setID(Long id) {this.id = id;}
+	public void setId(Long id) {this.id = id;}
 	public void setName(String name) {this.name = name;}
 	public void setCpf(Long cpf) {this.cpf = cpf;}
 	public void setUf(String uf) {this.uf = uf;}

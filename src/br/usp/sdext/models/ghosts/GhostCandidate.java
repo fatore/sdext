@@ -6,7 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import br.usp.sdext.models.Income;
+import br.usp.sdext.models.candidature.Income;
 
 @Entity
 @Table(name="ghost_candidate")
